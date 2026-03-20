@@ -158,12 +158,13 @@ Agent 完成后直接执行 `sqlite3 data.db "UPDATE ai_discovery SET md='...' W
 
 ### 平台
 
-- x.com（主力，搜索 + 博主主页 + 时间线）
+- x.com（搜索 + 博主主页 + 时间线，适度浏览，不必每轮都以 X 为主）
 - github.com（trending + AI 开发者主页 + 项目动态，有 follow 机制）
 - [先不考虑浏览]linkedin.com（AI 从业者/研究者动态，有 follow + 推荐机制）
 - producthunt.com（AI 新产品发布）
 - huggingface.co/papers（每日论文）
 - www.reddit.com/r/artificial
+- zhihu.com（知乎，中文 AI 社区讨论、技术深度内容）
 - 各 AI 产品 changelog 页面
 
 ### 监控维度
@@ -172,6 +173,7 @@ Agent 完成后直接执行 `sqlite3 data.db "UPDATE ai_discovery SET md='...' W
 - **AI 博主发现**：高影响力博主最新推文、大量转发的技术发现、新论文解读
 - **热点趋势**：24h 内高互动的 AI 推文、新出现的高频关键词
 - **热门工具/产品**：别人提到、推荐、讨论的工具和产品，尤其是功能明确、用户反馈好、适合独立开发者复刻的
+- **Prompt / Skill / Spec 实践**（全平台关注）：高质量的 prompt 工程实践、Claude Code SKILL.md 模板、Spec 驱动开发方法论、Agent 工作流配置等实战内容。所有平台浏览时都应留意此维度，不限于特定平台
 
 ## 数据存储
 
