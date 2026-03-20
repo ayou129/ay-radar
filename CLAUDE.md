@@ -32,9 +32,9 @@
 - **KeyHint**（[keyhint.onemake.dev](https://keyhint.onemake.dev/)）：长按 ⌘ Command 键，即刻显示当前 macOS 应用的所有快捷键，松开即消失
   - 技术栈：Swift / macOS 原生（≥ 13.0 Ventura）
   - 安装：DMG 直装 或 `brew tap ayou129/keyhint && brew install keyhint`
-  - 定位：一人开发者免费产品，隶属 [onemake.dev](https://onemake.dev)（Small, focused tools for Mac users）
+  - 定位：一人开发者免费产品，隶属 [onemake.dev](https://onemake.dev)（Small, focused tools for Mac & iOS users）
   - 特性：自动读取当前 App 菜单栏快捷键、含系统级快捷键、中英双语、Menu Bar 常驻零占用
-  - 关注方向：功能拓展、变现路径、同类或相邻产品动态
+  - 关注方向：功能拓展、变现路径、同类或相邻产品动态、**iOS 端产品机会**
 
 ## 巡检结束必做
 

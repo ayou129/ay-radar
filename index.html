@@ -512,7 +512,7 @@
   <div id="root"></div>
   <script type="text/babel">
     const { useState, useEffect, useCallback, useRef } = React;
-    const { Table, Tag, Drawer, Modal, Descriptions, Collapse, Tooltip, Space, Popconfirm, Button, message } = antd;
+    const { Table, Tag, Drawer, Modal, Descriptions, Collapse, Tooltip, Space, Popconfirm, Button, Input, message } = antd;
 
     async function api(path, opts = {}) {
       const res = await fetch(path, { ...opts, headers: { 'Content-Type': 'application/json', ...opts.headers } });
@@ -556,6 +556,13 @@
       const [articleOpen, setArticleOpen] = useState(false);
       const [articleHtml, setArticleHtml] = useState('');
       const [articleTitle, setArticleTitle] = useState('');
+      const [articleRecord, setArticleRecord] = useState(null);
+      const [articleNote, setArticleNote] = useState('');
+      const [articleNoteSaving, setArticleNoteSaving] = useState(false);
+      const [noteModalOpen, setNoteModalOpen] = useState(false);
+      const [noteRecord, setNoteRecord] = useState(null);
+      const [noteText, setNoteText] = useState('');
+      const [noteSaving, setNoteSaving] = useState(false);
 
       const load = useCallback(async (silent = false) => {
         if (!silent) setLoading(true);
@@ -606,10 +613,45 @@
           const data = await api(`/api/discoveries/${record.id}/article`);
           setArticleHtml(data.html);
           setArticleTitle(record.title || 'AI 深度分析');
+          setArticleRecord(record);
+          setArticleNote(record.user_note || '');
           setArticleOpen(true);
         } catch (e) {
           message.error('文章加载失败');
         }
+      };
+
+      const saveArticleNote = async () => {
+        if (!articleRecord) return;
+        setArticleNoteSaving(true);
+        try {
+          await api(`/api/discoveries/${articleRecord.id}/note`, {
+            method: 'PATCH', body: JSON.stringify({ user_note: articleNote }),
+          });
+          message.success('备注已保存');
+          load(true);
+        } catch(e) { message.error('保存失败'); }
+        finally { setArticleNoteSaving(false); }
+      };
+
+      const openNoteModal = (record) => {
+        setNoteRecord(record);
+        setNoteText(record.user_note || '');
+        setNoteModalOpen(true);
+      };
+
+      const saveNote = async () => {
+        if (!noteRecord) return;
+        setNoteSaving(true);
+        try {
+          await api(`/api/discoveries/${noteRecord.id}/note`, {
+            method: 'PATCH', body: JSON.stringify({ user_note: noteText }),
+          });
+          message.success('备注已保存');
+          setNoteModalOpen(false);
+          load(true);
+        } catch(e) { message.error('保存失败'); }
+        finally { setNoteSaving(false); }
       };
 
       const discoveryColumns = [
@@ -662,6 +704,19 @@
           render: (_, r) => r.md
             ? <button className="read-btn" onClick={() => openArticle(r)}>阅读</button>
             : <span className="no-article">—</span>,
+        },
+        {
+          title: '备注', dataIndex: 'user_note', width: 150, ellipsis: true,
+          render: (v, r) => (
+            <span
+              onClick={() => openNoteModal(r)}
+              style={{
+                fontSize: 11, cursor: 'pointer',
+                color: v ? 'var(--accent-purple)' : 'var(--text-muted)',
+                fontStyle: v ? 'normal' : 'italic',
+              }}
+            >{v || '添加备注'}</span>
+          ),
         },
         {
           title: '摘要', dataIndex: 'summary', ellipsis: true,
@@ -848,6 +903,17 @@
                   </Descriptions.Item>
                 </Descriptions>
                 <div className="detail-section">
+                  <h4>我的备注</h4>
+                  <span
+                    onClick={() => openNoteModal(detailItem)}
+                    style={{
+                      fontSize: 12, cursor: 'pointer', display: 'inline-block', padding: '4px 0',
+                      color: detailItem.user_note ? 'var(--accent-purple)' : 'var(--text-muted)',
+                      fontStyle: detailItem.user_note ? 'normal' : 'italic',
+                    }}
+                  >{detailItem.user_note || '点击添加备注'}</span>
+                </div>
+                <div className="detail-section">
                   <h4>内容摘要</h4>
                   <pre>{detailItem.summary || '暂无摘要'}</pre>
                 </div>
@@ -868,16 +934,58 @@
             )}
           </Drawer>
 
-          {/* Article Modal */}
+          {/* Article Modal — left: article, right: note */}
           <Modal
             title={<span style={{ fontFamily: 'var(--font-mono)', fontSize: 14, fontWeight: 600 }}>{articleTitle}</span>}
             open={articleOpen}
             onCancel={() => setArticleOpen(false)}
             footer={null}
-            width={700}
-            styles={{ body: { maxHeight: '75vh', overflow: 'auto', padding: '16px 24px' } }}
+            width={960}
+            styles={{ body: { padding: 0 } }}
           >
-            <div className="article-body" dangerouslySetInnerHTML={{ __html: articleHtml }} />
+            <div style={{ display: 'flex', height: '75vh' }}>
+              <div style={{ flex: 1, overflow: 'auto', padding: '16px 24px', borderRight: '1px solid var(--border-subtle)' }}>
+                <div className="article-body" dangerouslySetInnerHTML={{ __html: articleHtml }} />
+              </div>
+              <div style={{ width: 260, display: 'flex', flexDirection: 'column', padding: '16px', background: 'var(--bg-elevated)' }}>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--text-muted)', letterSpacing: '0.5px', textTransform: 'uppercase', marginBottom: 8 }}>我的备注</div>
+                <Input.TextArea
+                  value={articleNote}
+                  onChange={(e) => setArticleNote(e.target.value)}
+                  placeholder="阅读后记录想法、评价、关联 idea..."
+                  autoSize={{ minRows: 6, maxRows: 20 }}
+                  style={{ fontSize: 12, flex: 1, resize: 'none', background: 'var(--bg-surface)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-md)' }}
+                />
+                <Button
+                  type="primary"
+                  size="small"
+                  onClick={saveArticleNote}
+                  loading={articleNoteSaving}
+                  style={{ marginTop: 10, fontFamily: 'var(--font-mono)', fontSize: 11 }}
+                >保存备注</Button>
+              </div>
+            </div>
+          </Modal>
+
+          {/* Note Modal — from table cell or detail drawer */}
+          <Modal
+            title={<span style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>编辑备注 — #{noteRecord?.id} {noteRecord?.title || ''}</span>}
+            open={noteModalOpen}
+            onCancel={() => setNoteModalOpen(false)}
+            onOk={saveNote}
+            confirmLoading={noteSaving}
+            okText="保存"
+            cancelText="取消"
+            width={520}
+          >
+            <Input.TextArea
+              value={noteText}
+              onChange={(e) => setNoteText(e.target.value)}
+              placeholder="记录你的评价、想法、关联 idea..."
+              autoSize={{ minRows: 4, maxRows: 12 }}
+              style={{ fontSize: 13 }}
+              autoFocus
+            />
           </Modal>
         </div>
       );

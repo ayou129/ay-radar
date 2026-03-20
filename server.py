@@ -55,7 +55,8 @@ def init_db():
             updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
             round_id TEXT DEFAULT '',
             raw_data TEXT,
-            md TEXT
+            md TEXT,
+            user_note TEXT DEFAULT ''
         );
         CREATE TABLE IF NOT EXISTS ai_follow_log (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -228,6 +229,26 @@ async def get_discovery_article(discovery_id: int):
     import markdown as md_lib
     html = md_lib.markdown(row["md"], extensions=["extra", "codehilite", "toc"])
     return {"html": html}
+
+
+class UserNoteReq(BaseModel):
+    user_note: str = ""
+
+
+@app.patch("/api/discoveries/{discovery_id}/note")
+async def update_user_note(discovery_id: int, req: UserNoteReq):
+    conn = get_db()
+    row = conn.execute("SELECT id FROM ai_discovery WHERE id = ?", (discovery_id,)).fetchone()
+    if not row:
+        conn.close()
+        raise HTTPException(404, "记录不存在")
+    conn.execute(
+        "UPDATE ai_discovery SET user_note = ?, updated_at = ? WHERE id = ?",
+        (req.user_note, _now(), discovery_id),
+    )
+    conn.commit()
+    conn.close()
+    return {"status": "updated", "id": discovery_id}
 
 
 # ── Follow Log API ──
