@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(*)",
+      "Read(//Users/ay/**)",
+      "Read(//tmp/**)",
+      "Edit(//Users/ay/Desktop/app/**)",
+      "WebFetch(domain:*)",
+      "WebFetch(*)",
+      "WebSearch",
+      "mcp__playwright__browser_navigate",
+      "mcp__playwright__browser_take_screenshot",
+      "mcp__playwright__browser_click",
+      "mcp__playwright__browser_run_code",
+      "mcp__playwright__browser_snapshot",
+      "mcp__playwright__browser_evaluate",
+      "mcp__playwright__browser_close",
+      "mcp__playwright__browser_wait_for",
+      "mcp__playwright__browser_tabs",
+      "Skill(update-config)"
+    ],
+    "deny": []
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "playwright"
+  ],
+  "additionalDirectories": []
+}
