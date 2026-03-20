@@ -27,6 +27,15 @@
 所有项目共用同一个 Chrome 实例（CDP 端口 9222），profile 位于 `~/.chrome-shared/.chrome-profile/`。
 启动脚本通过 symlink 引用：`.claude/scripts/start-playwright-mcp.sh` → `~/.chrome-shared/start-playwright-mcp.sh`
 
+## 自有产品
+
+- **KeyHint**（[keyhint.onemake.dev](https://keyhint.onemake.dev/)）：长按 ⌘ Command 键，即刻显示当前 macOS 应用的所有快捷键，松开即消失
+  - 技术栈：Swift / macOS 原生（≥ 13.0 Ventura）
+  - 安装：DMG 直装 或 `brew tap ayou129/keyhint && brew install keyhint`
+  - 定位：一人开发者免费产品，隶属 [onemake.dev](https://onemake.dev)（Small, focused tools for Mac users）
+  - 特性：自动读取当前 App 菜单栏快捷键、含系统级快捷键、中英双语、Menu Bar 常驻零占用
+  - 关注方向：功能拓展、变现路径、同类或相邻产品动态
+
 ## 巡检结束必做
 
 每轮巡检完成后（Step 6），在结束总结中必须包含：
@@ -36,6 +45,14 @@
 
 ## 启动命令
 
+### 巡检（广度）
+
 ```
 /loop 20m 阅读 @文档说明-AI探索.md 和 @文档说明-Playwright.md 按「单轮执行流程」执行一轮 AI 内容巡检。
+```
+
+### 深度调研（深度）
+
+```
+阅读 @文档说明-AI探索.md 和 @文档说明-Playwright.md 按「深度调研流程」对 #<id> 进行深度调研。
 ```
