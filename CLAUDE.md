@@ -27,6 +27,13 @@
 所有项目共用同一个 Chrome 实例（CDP 端口 9222），profile 位于 `~/.chrome-shared/.chrome-profile/`。
 启动脚本通过 symlink 引用：`.claude/scripts/start-playwright-mcp.sh` → `~/.chrome-shared/start-playwright-mcp.sh`
 
+## 巡检结束必做
+
+每轮巡检完成后（Step 6），在结束总结中必须包含：
+
+1. **Idea 发现**：本轮浏览中有没有发现适合复刻、适合做自媒体选题、或有商业潜力的 idea？逐条列出，标注来源和可行性判断
+2. **优化建议**：流程/效率/质量方面的可优化点，追加到 `文档说明-AI探索.md` 的「待讨论优化项」列表
+
 ## 启动命令
 
 ```
