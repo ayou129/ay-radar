@@ -658,7 +658,7 @@
           render: (v, r) => <span className="title-link" onClick={() => openDetail(r.id)}>{v || '无标题'}</span>,
         },
         {
-          title: '分析', width: 55, align: 'center',
+          title: '分析', width: 70, align: 'center',
           render: (_, r) => r.md
             ? <button className="read-btn" onClick={() => openArticle(r)}>阅读</button>
             : <span className="no-article">—</span>,
@@ -680,9 +680,9 @@
           render: (v) => <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--text-muted)' }}>{v ? dayjs(v).format('MM-DD HH:mm') : '-'}</span>,
         },
         {
-          title: '', width: 75,
+          title: '操作', width: 100,
           render: (_, r) => (
-            <Space size={2}>
+            <Space size={8}>
               {r.url && <button className="act-link" onClick={() => window.open(r.url, '_blank')}>原文</button>}
               <Popconfirm title="确定删除？" onConfirm={() => handleDelete(r.id)} okText="删除" cancelText="取消">
                 <button className="act-link danger">删除</button>
