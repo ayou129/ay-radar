@@ -25,7 +25,7 @@
 
 #### Step 1：准备
 
-1. 读取本文档 + `文档说明-Playwright.md`（反检测、延迟等操作规范）
+1. 读取本文档 + Playwright 操作规范（反检测、延迟等，自动加载自用户级 rules）
 2. 查 `ai_follow_log` 当日已关注数（阈值 30）
 3. 查 `ai_discovery` 已有记录的 `url` 和 `title`，用于双重去重：
    - **URL 去重**：同一链接不重复插入
@@ -147,7 +147,7 @@ Agent 完成后用 Python `sqlite3` 模块写入 DB。
 1. **若输入为 `#<id>`**：从 `ai_discovery` 读取该记录的 `title`、`summary`、`md`、`raw_data`
 2. **若输入为自由文字或产品调研**：以用户描述作为调研起点
 3. 读取 `CLAUDE.md` 中「自有产品」信息，明确当前产品线和关注方向
-4. 读取 `文档说明-Playwright.md`（反检测、延迟等操作规范）
+4. 读取 Playwright 操作规范（反检测、延迟等，自动加载自用户级 rules）
 
 #### Step 2：确定调研方向
 
@@ -168,7 +168,7 @@ Agent 完成后用 Python `sqlite3` 模块写入 DB。
 - **ProductHunt**：竞品页面、评论区、投票数据
 - **Google**：定价模型、技术博客、市场分析
 
-遵循 `文档说明-Playwright.md` 的反检测和频率规范。
+遵循 Playwright 操作规范的反检测和频率规范（自动加载自用户级 rules）。
 
 #### Step 4：输出报告
 

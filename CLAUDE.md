@@ -3,7 +3,6 @@
 ## 全局必读文档
 
 - `文档说明-AI探索.md`：AI 巡检流程、`ai_discovery` 表结构、采集规范、分析规范
-- `文档说明-Playwright.md`（symlink → `~/.chrome-shared/playwright.md`）：所有浏览器操作规范
 
 ## 数据存储
 
@@ -14,11 +13,6 @@
 
 - 启动：`python server.py`（http://localhost:8002）
 - 前端：`index.html`（单文件 React 应用）
-
-## 浏览器共享
-
-所有项目共用同一个 Chrome 实例（CDP 端口 9222），profile 位于 `~/.chrome-shared/.chrome-profile/`。
-启动脚本通过 symlink 引用：`.claude/scripts/start-playwright-mcp.sh` → `~/.chrome-shared/start-playwright-mcp.sh`
 
 ## 自有产品
 
@@ -43,13 +37,13 @@
 ### 巡检（广度）
 
 ```
-/loop 30m 阅读 @文档说明-AI探索.md 和 @文档说明-Playwright.md 按「单轮执行流程」执行一轮 AI 内容巡检。
+/loop 30m 阅读 @文档说明-AI探索.md 按「单轮执行流程」执行一轮 AI 内容巡检。
 ```
 
 ### 深度调研（深度）
 
 ```
-阅读 @文档说明-AI探索.md 和 @文档说明-Playwright.md 按「深度调研流程」对 #<id> 进行深度调研。
+阅读 @文档说明-AI探索.md 按「深度调研流程」对 #<id> 进行深度调研。
 ```
 
 也支持自由输入：`按深度调研流程，调研一下 macOS 快捷键工具的竞品格局`
