@@ -512,7 +512,7 @@
   <div id="root"></div>
   <script type="text/babel">
     const { useState, useEffect, useCallback, useRef } = React;
-    const { Table, Tag, Drawer, Modal, Descriptions, Collapse, Tooltip, Space, Popconfirm, Button, Input, message } = antd;
+    const { Table, Tag, Modal, Descriptions, Collapse, Tooltip, Space, Popconfirm, Button, Input, message } = antd;
 
     async function api(path, opts = {}) {
       const res = await fetch(path, { ...opts, headers: { 'Content-Type': 'application/json', ...opts.headers } });
@@ -553,16 +553,9 @@
       const [detailOpen, setDetailOpen] = useState(false);
       const [detailItem, setDetailItem] = useState(null);
       const [activeTab, setActiveTab] = useState('discoveries');
-      const [articleOpen, setArticleOpen] = useState(false);
       const [articleHtml, setArticleHtml] = useState('');
-      const [articleTitle, setArticleTitle] = useState('');
-      const [articleRecord, setArticleRecord] = useState(null);
       const [articleNote, setArticleNote] = useState('');
       const [articleNoteSaving, setArticleNoteSaving] = useState(false);
-      const [noteModalOpen, setNoteModalOpen] = useState(false);
-      const [noteRecord, setNoteRecord] = useState(null);
-      const [noteText, setNoteText] = useState('');
-      const [noteSaving, setNoteSaving] = useState(false);
 
       const load = useCallback(async (silent = false) => {
         if (!silent) setLoading(true);
@@ -596,10 +589,20 @@
         return () => clearInterval(t);
       }, [load]);
 
-      const openDetail = async (id) => {
+      const openDetail = async (id, record) => {
         const data = await api(`/api/discoveries/${id}`);
         setDetailItem(data);
         setDetailOpen(true);
+        setArticleNote(data.user_note || '');
+        // Load article html if md exists
+        if (data.md) {
+          try {
+            const artData = await api(`/api/discoveries/${id}/article`);
+            setArticleHtml(artData.html);
+          } catch(e) { setArticleHtml(''); }
+        } else {
+          setArticleHtml('');
+        }
       };
 
       const handleDelete = async (id) => {
@@ -608,51 +611,6 @@
         load();
       };
 
-      const openArticle = async (record) => {
-        try {
-          const data = await api(`/api/discoveries/${record.id}/article`);
-          setArticleHtml(data.html);
-          setArticleTitle(record.title || 'AI 深度分析');
-          setArticleRecord(record);
-          setArticleNote(record.user_note || '');
-          setArticleOpen(true);
-        } catch (e) {
-          message.error('文章加载失败');
-        }
-      };
-
-      const saveArticleNote = async () => {
-        if (!articleRecord) return;
-        setArticleNoteSaving(true);
-        try {
-          await api(`/api/discoveries/${articleRecord.id}/note`, {
-            method: 'PATCH', body: JSON.stringify({ user_note: articleNote }),
-          });
-          message.success('备注已保存');
-          load(true);
-        } catch(e) { message.error('保存失败'); }
-        finally { setArticleNoteSaving(false); }
-      };
-
-      const openNoteModal = (record) => {
-        setNoteRecord(record);
-        setNoteText(record.user_note || '');
-        setNoteModalOpen(true);
-      };
-
-      const saveNote = async () => {
-        if (!noteRecord) return;
-        setNoteSaving(true);
-        try {
-          await api(`/api/discoveries/${noteRecord.id}/note`, {
-            method: 'PATCH', body: JSON.stringify({ user_note: noteText }),
-          });
-          message.success('备注已保存');
-          setNoteModalOpen(false);
-          load(true);
-        } catch(e) { message.error('保存失败'); }
-        finally { setNoteSaving(false); }
-      };
 
       const discoveryColumns = [
         {
@@ -697,29 +655,26 @@
         },
         {
           title: '标题', dataIndex: 'title', width: 220, ellipsis: true,
-          render: (v, r) => <span className="title-link" onClick={() => openDetail(r.id)}>{v || '无标题'}</span>,
+          render: (v, r) => <span className="title-link" onClick={() => openDetail(r.id, r)}>{v || '无标题'}</span>,
         },
         {
-          title: '分析', width: 70, align: 'center',
+          title: '分析', width: 50, align: 'center',
           render: (_, r) => r.md
-            ? <button className="read-btn" onClick={() => openArticle(r)}>阅读</button>
+            ? <span style={{ fontSize: 9, fontFamily: 'var(--font-mono)', color: 'var(--accent-green)', background: 'var(--accent-green-dim)', padding: '1px 5px', borderRadius: 3 }}>MD</span>
             : <span className="no-article">—</span>,
         },
         {
-          title: '备注', dataIndex: 'user_note', width: 150, ellipsis: true,
-          render: (v, r) => (
-            <span
-              onClick={() => openNoteModal(r)}
-              style={{
-                fontSize: 11, cursor: 'pointer',
-                color: v ? 'var(--accent-purple)' : 'var(--text-muted)',
-                fontStyle: v ? 'normal' : 'italic',
-              }}
-            >{v || '添加备注'}</span>
+          title: '备注', dataIndex: 'user_note', width: 120, ellipsis: true,
+          render: (v) => (
+            <span style={{
+              fontSize: 11,
+              color: v ? 'var(--accent-purple)' : 'var(--text-muted)',
+              fontStyle: v ? 'normal' : 'italic',
+            }}>{v || '—'}</span>
           ),
         },
         {
-          title: '摘要', dataIndex: 'summary', ellipsis: true,
+          title: '摘要', dataIndex: 'summary', width: 180, ellipsis: true,
           render: (v) => (
             <Tooltip title={v} placement="topLeft" overlayStyle={{ maxWidth: 480 }} overlayInnerStyle={{ background: 'var(--bg-elevated)', color: 'var(--text-primary)', border: '1px solid var(--border-subtle)' }}>
               <span style={{ fontSize: 11, color: 'var(--text-secondary)', cursor: 'default' }}>{v || '-'}</span>
@@ -871,82 +826,19 @@
             )}
           </div>
 
-          {/* Detail Drawer */}
-          <Drawer
-            title={<span style={{ fontFamily: 'var(--font-mono)', fontSize: 14 }}>{detailItem?.title || 'Signal Detail'}</span>}
-            open={detailOpen}
-            onClose={() => setDetailOpen(false)}
-            width={560}
-          >
-            {detailItem && (
-              <div>
-                <Descriptions column={2} size="small" bordered style={{ marginBottom: 14 }}>
-                  <Descriptions.Item label="平台">
-                    <span className="platform-badge" style={{ background: PLATFORM_BG[detailItem.platform], color: PLATFORM_COLORS[detailItem.platform] }}>
-                      {detailItem.platform}
-                    </span>
-                  </Descriptions.Item>
-                  <Descriptions.Item label="级别">
-                    <span className={`importance-dot ${detailItem.importance}`}>{IMPORTANCE_LABELS[detailItem.importance]}</span>
-                  </Descriptions.Item>
-                  <Descriptions.Item label="分类">
-                    {(() => { const c = CATEGORY_MAP[detailItem.category] || { label: detailItem.category, color: '#666', bg: 'rgba(102,102,102,0.1)' }; return <span className="cat-chip" style={{ color: c.color, background: c.bg }}>{c.label}</span>; })()}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="作者">
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12 }}>{detailItem.author || '-'}</span>
-                  </Descriptions.Item>
-                  <Descriptions.Item label="发布时间" span={2}>{detailItem.published_at || '-'}</Descriptions.Item>
-                  <Descriptions.Item label="发现时间">{detailItem.discovered_at || '-'}</Descriptions.Item>
-                  <Descriptions.Item label="巡检轮次">{detailItem.round_id || '-'}</Descriptions.Item>
-                  <Descriptions.Item label="原始链接" span={2}>
-                    {detailItem.url ? <a href={detailItem.url} target="_blank" rel="noreferrer" style={{ wordBreak: 'break-all', fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--accent-cyan)' }}>{detailItem.url}</a> : '-'}
-                  </Descriptions.Item>
-                </Descriptions>
-                <div className="detail-section">
-                  <h4>我的备注</h4>
-                  <span
-                    onClick={() => openNoteModal(detailItem)}
-                    style={{
-                      fontSize: 12, cursor: 'pointer', display: 'inline-block', padding: '4px 0',
-                      color: detailItem.user_note ? 'var(--accent-purple)' : 'var(--text-muted)',
-                      fontStyle: detailItem.user_note ? 'normal' : 'italic',
-                    }}
-                  >{detailItem.user_note || '点击添加备注'}</span>
-                </div>
-                <div className="detail-section">
-                  <h4>内容摘要</h4>
-                  <pre>{detailItem.summary || '暂无摘要'}</pre>
-                </div>
-                {detailItem.raw_data && (
-                  <div className="detail-section">
-                    <Collapse items={[{ key: '1', label: <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11 }}>RAW DATA</span>,
-                      children: <pre style={{ fontSize: 10 }}>{detailItem.raw_data}</pre> }]} />
-                  </div>
-                )}
-                {detailItem.md && (
-                  <div style={{ marginTop: 8 }}>
-                    <button className="read-btn" style={{ fontSize: 12, padding: '6px 16px' }} onClick={() => openArticle(detailItem)}>
-                      阅读深度分析
-                    </button>
-                  </div>
-                )}
-              </div>
-            )}
-          </Drawer>
-
-          {/* Article Modal — left: article, right: note */}
+          {/* Detail Modal — all info + article + note */}
           <Modal
             title={
               React.createElement('div', { style: { display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 } },
-                React.createElement('span', { style: { fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--text-muted)', flexShrink: 0 } }, `#${articleRecord?.id || ''}`),
-                React.createElement('span', { style: { fontFamily: 'var(--font-mono)', fontSize: 14, fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flexShrink: 1 } }, articleTitle),
-                articleRecord?.url && React.createElement('a', {
-                  href: articleRecord.url, target: '_blank', rel: 'noopener',
+                React.createElement('span', { style: { fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--text-muted)', flexShrink: 0 } }, `#${detailItem?.id || ''}`),
+                React.createElement('span', { style: { fontFamily: 'var(--font-mono)', fontSize: 14, fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flexShrink: 1 } }, detailItem?.title || '无标题'),
+                detailItem?.url && React.createElement('a', {
+                  href: detailItem.url, target: '_blank', rel: 'noopener',
                   style: { flexShrink: 0, fontSize: 10, color: 'var(--accent-cyan)', fontFamily: 'var(--font-mono)', textDecoration: 'none', whiteSpace: 'nowrap' }
                 }, '来源'),
                 React.createElement('button', {
                   onClick: () => {
-                    const text = `标题: ${articleTitle}\n来源: ${articleRecord?.url || '无链接'}`;
+                    const text = `标题: ${detailItem?.title || ''}\n来源: ${detailItem?.url || '无链接'}`;
                     navigator.clipboard.writeText(text).then(() => message.success('已复制'));
                   },
                   style: {
@@ -958,56 +850,98 @@
                 }, '复制')
               )
             }
-            open={articleOpen}
-            onCancel={() => setArticleOpen(false)}
+            open={detailOpen}
+            onCancel={() => setDetailOpen(false)}
             footer={null}
-            width={960}
+            width={1100}
+            centered
             styles={{ body: { padding: 0 } }}
           >
-            <div style={{ display: 'flex', height: '75vh' }}>
-              <div style={{ flex: 1, overflow: 'auto', padding: '16px 24px', borderRight: '1px solid var(--border-subtle)' }}>
-                <div className="article-body" dangerouslySetInnerHTML={{ __html: articleHtml }} />
+            {detailItem && (
+              <div>
+                {/* Metadata */}
+                <div style={{ padding: '16px 24px', borderBottom: '1px solid var(--border-subtle)' }}>
+                  <Descriptions column={4} size="small" bordered>
+                    <Descriptions.Item label="ID">
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11 }}>{detailItem.id}</span>
+                    </Descriptions.Item>
+                    <Descriptions.Item label="平台">
+                      <span className="platform-badge" style={{ background: PLATFORM_BG[detailItem.platform], color: PLATFORM_COLORS[detailItem.platform] }}>
+                        {detailItem.platform}
+                      </span>
+                    </Descriptions.Item>
+                    <Descriptions.Item label="级别">
+                      <span className={`importance-dot ${detailItem.importance}`}>{IMPORTANCE_LABELS[detailItem.importance]}</span>
+                    </Descriptions.Item>
+                    <Descriptions.Item label="分类">
+                      {(() => { const c = CATEGORY_MAP[detailItem.category] || { label: detailItem.category, color: '#666', bg: 'rgba(102,102,102,0.1)' }; return <span className="cat-chip" style={{ color: c.color, background: c.bg }}>{c.label}</span>; })()}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="作者">
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12 }}>{detailItem.author || '-'}</span>
+                    </Descriptions.Item>
+                    <Descriptions.Item label="发布时间">{detailItem.published_at || '-'}</Descriptions.Item>
+                    <Descriptions.Item label="发现时间">{detailItem.discovered_at || '-'}</Descriptions.Item>
+                    <Descriptions.Item label="巡检轮次">{detailItem.round_id || '-'}</Descriptions.Item>
+                  </Descriptions>
+                </div>
+
+                {/* Content area: left = summary + article, right = note */}
+                <div style={{ display: 'flex', height: '65vh' }}>
+                  <div style={{ flex: 1, overflow: 'auto', padding: '16px 24px', borderRight: '1px solid var(--border-subtle)' }}>
+                    {/* Summary */}
+                    <div className="detail-section">
+                      <h4>内容摘要</h4>
+                      <pre>{detailItem.summary || '暂无摘要'}</pre>
+                    </div>
+
+                    {/* Article MD */}
+                    {articleHtml && (
+                      <div className="detail-section" style={{ marginTop: 16 }}>
+                        <h4>深度分析</h4>
+                        <div className="article-body" dangerouslySetInnerHTML={{ __html: articleHtml }} />
+                      </div>
+                    )}
+
+                    {/* Raw data */}
+                    {detailItem.raw_data && (
+                      <div className="detail-section" style={{ marginTop: 16 }}>
+                        <Collapse items={[{ key: '1', label: <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11 }}>RAW DATA</span>,
+                          children: <pre style={{ fontSize: 10 }}>{detailItem.raw_data}</pre> }]} />
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Note sidebar */}
+                  <div style={{ width: 280, display: 'flex', flexDirection: 'column', padding: '16px', background: 'var(--bg-elevated)' }}>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--text-muted)', letterSpacing: '0.5px', textTransform: 'uppercase', marginBottom: 8 }}>我的备注</div>
+                    <Input.TextArea
+                      value={articleNote}
+                      onChange={(e) => setArticleNote(e.target.value)}
+                      placeholder="阅读后记录想法、评价、关联 idea..."
+                      autoSize={{ minRows: 8, maxRows: 30 }}
+                      style={{ fontSize: 12, flex: 1, resize: 'none', background: 'var(--bg-surface)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-md)' }}
+                    />
+                    <Button
+                      type="primary"
+                      size="small"
+                      onClick={() => {
+                        if (!detailItem) return;
+                        setArticleNoteSaving(true);
+                        api(`/api/discoveries/${detailItem.id}/note`, {
+                          method: 'PATCH', body: JSON.stringify({ user_note: articleNote }),
+                        }).then(() => { message.success('备注已保存'); load(true); })
+                          .catch(() => message.error('保存失败'))
+                          .finally(() => setArticleNoteSaving(false));
+                      }}
+                      loading={articleNoteSaving}
+                      style={{ marginTop: 10, fontFamily: 'var(--font-mono)', fontSize: 11 }}
+                    >保存备注</Button>
+                  </div>
+                </div>
               </div>
-              <div style={{ width: 260, display: 'flex', flexDirection: 'column', padding: '16px', background: 'var(--bg-elevated)' }}>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--text-muted)', letterSpacing: '0.5px', textTransform: 'uppercase', marginBottom: 8 }}>我的备注</div>
-                <Input.TextArea
-                  value={articleNote}
-                  onChange={(e) => setArticleNote(e.target.value)}
-                  placeholder="阅读后记录想法、评价、关联 idea..."
-                  autoSize={{ minRows: 6, maxRows: 20 }}
-                  style={{ fontSize: 12, flex: 1, resize: 'none', background: 'var(--bg-surface)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-md)' }}
-                />
-                <Button
-                  type="primary"
-                  size="small"
-                  onClick={saveArticleNote}
-                  loading={articleNoteSaving}
-                  style={{ marginTop: 10, fontFamily: 'var(--font-mono)', fontSize: 11 }}
-                >保存备注</Button>
-              </div>
-            </div>
+            )}
           </Modal>
 
-          {/* Note Modal — from table cell or detail drawer */}
-          <Modal
-            title={<span style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>编辑备注 — #{noteRecord?.id} {noteRecord?.title || ''}</span>}
-            open={noteModalOpen}
-            onCancel={() => setNoteModalOpen(false)}
-            onOk={saveNote}
-            confirmLoading={noteSaving}
-            okText="保存"
-            cancelText="取消"
-            width={520}
-          >
-            <Input.TextArea
-              value={noteText}
-              onChange={(e) => setNoteText(e.target.value)}
-              placeholder="记录你的评价、想法、关联 idea..."
-              autoSize={{ minRows: 4, maxRows: 12 }}
-              style={{ fontSize: 13 }}
-              autoFocus
-            />
-          </Modal>
         </div>
       );
     }

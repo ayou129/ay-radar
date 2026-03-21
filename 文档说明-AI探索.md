@@ -282,3 +282,4 @@ Agent 完成后直接执行 `sqlite3 data.db "UPDATE ai_discovery SET md='...' W
 - [2026-03-20] 中文 AI 内容（如央视 AI 短片）在 X.com 上讨论度低但在国内平台（知乎、抖音）传播极广。建议增加微博热搜或抖音热榜作为中文 AI 内容的补充采集源，避免遗漏国内 AI 热点。
 - [2026-03-20] X.com 首页时间线信噪比高于搜索结果，建议每轮巡检优先刷首页时间线（已 follow 的高质量账号产出），搜索作为补充而非主要采集入口。（本轮首页时间线发现了 Google Stitch、Perplexity Health 等高价值内容，而搜索结果多为已入库或低质量）
 - [2026-03-20] GitHub Trending 和 ProductHunt 的采集效率较高（结构化数据、一页可见所有内容），但跨轮重复率高。建议建立「近 3 日已采集的 GitHub/PH 项目名」快速检查列表，跳过已知项目，减少无效浏览时间。
+- [2026-03-21] 本文档本质上就是一个 Claude Code SKILL，但缺少标准 SKILL.md 格式（YAML 头部 + allowed-tools 约束）。后期改造为标准 SKILL 格式放入 `~/.claude/skills/`，实现 `/ai-explore` 一键调用，替代每次手动指定"读取文档后执行"。参考 [gstack](https://github.com/garrytan/gstack) 的 SKILL.md 结构。
