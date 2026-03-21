@@ -938,6 +938,7 @@
           <Modal
             title={
               React.createElement('div', { style: { display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 } },
+                React.createElement('span', { style: { fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--text-muted)', flexShrink: 0 } }, `#${articleRecord?.id || ''}`),
                 React.createElement('span', { style: { fontFamily: 'var(--font-mono)', fontSize: 14, fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flexShrink: 1 } }, articleTitle),
                 articleRecord?.url && React.createElement('a', {
                   href: articleRecord.url, target: '_blank', rel: 'noopener',
