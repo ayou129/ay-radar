@@ -936,7 +936,27 @@
 
           {/* Article Modal — left: article, right: note */}
           <Modal
-            title={<span style={{ fontFamily: 'var(--font-mono)', fontSize: 14, fontWeight: 600 }}>{articleTitle}</span>}
+            title={
+              React.createElement('div', { style: { display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 } },
+                React.createElement('span', { style: { fontFamily: 'var(--font-mono)', fontSize: 14, fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flexShrink: 1 } }, articleTitle),
+                articleRecord?.url && React.createElement('a', {
+                  href: articleRecord.url, target: '_blank', rel: 'noopener',
+                  style: { flexShrink: 0, fontSize: 10, color: 'var(--accent-cyan)', fontFamily: 'var(--font-mono)', textDecoration: 'none', whiteSpace: 'nowrap' }
+                }, '来源'),
+                React.createElement('button', {
+                  onClick: () => {
+                    const text = `标题: ${articleTitle}\n来源: ${articleRecord?.url || '无链接'}`;
+                    navigator.clipboard.writeText(text).then(() => message.success('已复制'));
+                  },
+                  style: {
+                    flexShrink: 0, padding: '2px 8px', fontSize: 10, cursor: 'pointer',
+                    background: 'var(--accent-cyan-dim)', color: 'var(--accent-cyan)',
+                    border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-sm)',
+                    fontFamily: 'var(--font-mono)', lineHeight: '18px',
+                  }
+                }, '复制')
+              )
+            }
             open={articleOpen}
             onCancel={() => setArticleOpen(false)}
             footer={null}
