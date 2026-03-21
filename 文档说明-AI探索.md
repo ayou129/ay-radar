@@ -276,6 +276,8 @@ Agent 完成后用 Python `sqlite3` 模块写入 DB。
 - [2026-03-20] GitHub Trending 和 ProductHunt 跨轮重复率高，建议建立近期已采集项目快速检查列表
 - [2026-03-21] 本文档本质上就是一个 Claude Code SKILL，后期改造为标准 SKILL.md 格式放入 `~/.claude/skills/`，实现 `/ai-explore` 一键调用。参考 [gstack](https://github.com/garrytan/gstack) 的结构
 - [2026-03-21] GitHub Trending 和 ProductHunt 本轮几乎全部重复，建议将这两个平台降为隔轮检查，或只在有新日期数据时访问（节省操作配额）
+- [2026-03-21] HuggingFace Daily Papers 当日更新时间较晚（UTC），早间巡检容易与前一天重复，建议下午/晚间巡检时再访问
+- [2026-03-21] X.com 时间线信噪比确认高于搜索结果——本轮时间线发现了 Cursor/VESPER/Schoger 等高价值内容，搜索结果多为低互动转载
 
 ### Idea 发现
 
@@ -285,3 +287,6 @@ Agent 完成后用 Python `sqlite3` 模块写入 DB。
 - [2026-03-21] #175 Claude Code 云端定时任务可能替代本地 /loop 巡检模式（需评估功能边界）
 - [2026-03-21] #185 Mistral Vibe 开源 CLI Agent 的架构值得研究：LLM 提供商抽象层设计，可借鉴做多模型切换的工具框架（技术参考）
 - [2026-03-21] #186 OpenAI vs Anthropic 的 Skill 生态对比选题：frontend-skill vs frontend-design，谁的开发者体验更好（自媒体价值：高）
+- [2026-03-21] #196 Claude Channels 变现模式：$497 安装费 + MRR 月度订阅，一人即可执行的 AI 助手安装服务（商业可行性：高）
+- [2026-03-21] #194 Steve Schoger「Claude Code 作为设计工具」教程拆解选题：Refactoring UI 作者的实战方法论（自媒体价值：高）
+- [2026-03-21] #202 异构多 Agent 架构选题：强模型规划 + 多弱模型并行执行，成本降10倍效率不减（自媒体+技术参考）
