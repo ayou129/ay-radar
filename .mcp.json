@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "playwright": {
+      "type": "stdio",
+      "command": "/Users/ay/.claude/scripts/start-playwright-mcp.sh",
+      "args": [],
+      "env": {}
+    }
+  }
+}
