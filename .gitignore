@@ -6,3 +6,6 @@ __pycache__/
 !.claude/settings.local.json
 .playwright-mcp/
 *.log
+
+scripts
+.codex

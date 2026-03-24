@@ -9,7 +9,14 @@
 
 将分散在各平台的 AI 动态聚合为结构化摘要，服务两个目的：
 1. **自媒体选题**：作为灵感来源和信息差优势
-2. **产品机会**：发现热门工具/产品时，评估是否适合复刻或借鉴优化到 [onemake.dev](https://onemake.dev) 现有产品线（当前产品：KeyHint — macOS 快捷键提示工具）。**不限于 macOS，iOS App 同样在评估范围内**
+2. **产品机会**：发现热门工具/产品时，评估是否适合复刻或借鉴优化到自有产品线
+
+### 自有产品
+
+- **KeyHint**（[onemake.dev/keyhint](https://onemake.dev/keyhint)）：长按 ⌘ Command 键，即刻显示当前 macOS 应用的所有快捷键，松开即消失
+  - 技术栈：Swift / macOS 原生（≥ 13.0 Ventura）
+  - 定位：一人开发者免费产品，隶属 [onemake.dev](https://onemake.dev)（Small, focused tools for Mac & iOS users）
+  - 关注方向：功能拓展、变现路径、同类或相邻产品动态、**iOS 端产品机会**
 
 ### 探索优先级
 
@@ -132,22 +139,22 @@ Agent 完成后用 Python `sqlite3` 模块写入 DB。
 
 #### Step 6：结束
 
-1. 输出本轮总结（采集概览 + 高价值发现）
-2. 将发现的 Idea 追加到本文档「Idea 发现」列表
-3. 将流程优化建议追加到「待讨论优化项」列表
+1. 输出本轮总结（采集概览 + 高价值发现），必须包含：
+   - **Idea 发现**：适合复刻、做选题、或有商业潜力的 idea，逐条追加到本文档「Idea 发现」列表
+   - **优化建议**：流程/效率/质量方面的可优化点，追加到本文档「待讨论优化项」列表
 
 ### 深度调研（深度）
 
 > **用 MCP 浏览器做定向深度调研，支持三种输入方式：**
 > - `#<id>`：以 `ai_discovery` 中某条记录为起点展开
 > - 自由文字：围绕用户描述的想法、话题、趋势进行探索
-> - 自有产品：针对 `CLAUDE.md` 中「自有产品」做竞品/拓展方向调研
+> - 自有产品：针对本文档「自有产品」做竞品/拓展方向调研
 
 #### Step 1：读取上下文
 
 1. **若输入为 `#<id>`**：从 `ai_discovery` 读取该记录的 `title`、`summary`、`md`、`raw_data`
 2. **若输入为自由文字或产品调研**：以用户描述作为调研起点
-3. 读取 `CLAUDE.md` 中「自有产品」信息，明确当前产品线和关注方向
+3. 读取本文档「自有产品」信息，明确当前产品线和关注方向
 4. 读取 Playwright 操作规范（反检测、延迟等，自动加载自用户级 rules）
 
 #### Step 2：确定调研方向
@@ -281,6 +288,11 @@ Agent 完成后用 Python `sqlite3` 模块写入 DB。
 - [2026-03-21] X.com 时间线信噪比确认高于搜索结果——本轮时间线发现了 Cursor/VESPER/Schoger 等高价值内容，搜索结果多为低互动转载
 - [2026-03-21] GitHub Trending 连续两轮几乎全部重复，建议降频为隔轮检查或仅在新日期数据时访问
 - [2026-03-21] ProductHunt 今日新品质量尚可（Novi Notes、Caplo、Design Agent），但投票数普遍较低（<20），建议关注 Featured 而非 All 以提高信噪比
+- [2026-03-23] MCP 配置文件应放项目根目录 `.mcp.json` 而非 `.claude/.mcp.json`——后者不会被 Claude Code 识别。已踩坑修复
+- [2026-03-23] X.com "正在关注"标签 AI 信噪比极高（本轮 12 条中 10 条直接 AI 相关），"为你推荐"标签 Elon Musk 内容占比过高但偶有高价值 AI 推荐（如 DeerFlow 2.0、Claude Code 配置指南 9K likes）
+- [2026-03-24] ProductHunt Cloudflare 验证需手动点击复选框才能通过，且首次通过后 URL 会跳转到错误日期（3/1），需二次导航。考虑优先用 WebSearch 抓取 PH 数据代替浏览器访问
+- [2026-03-24] GitHub Trending 连续三轮高重复率（本轮 15 项中约 10 项已在 DB），确认降频为隔轮检查的必要性
+- [2026-03-24] Claude Computer Use 发布当天，X.com 时间线被相关内容刷屏——重大产品发布日应聚焦该主题深挖，而非平铺浏览多平台
 
 ### Idea 发现
 
@@ -301,3 +313,13 @@ Agent 完成后用 Python `sqlite3` 模块写入 DB。
 - [2026-03-21] #214 全 AI 游戏开发栈（Claude + World Labs + MeshyAI + Three.js）验证了一人全栈做游戏的可行路径（游戏开发：高）
 - [2026-03-21] #218 Sprite Sheet Creator：AI 文本→2D 游戏角色精灵图+行走动画。1768 likes 验证强需求，直接解决 2D 游戏美术瓶颈（游戏开发：高，你的 UI 卡点的直接解法之一）
 - [2026-03-21] #220 Cascadeur：本地 AI 3D 动画，无限生成无需云端。解决角色动画瓶颈（游戏开发：高）
+- [2026-03-23] #238 AlphaClaw Apex（macOS 原生 OpenClaw Fleet Manager）：与 KeyHint 同为 macOS 原生工具，验证了 macOS AI Agent 管理工具的市场需求（产品参考：中）
+- [2026-03-23] #243 Obsidian Skills（Kepano 官方发布）：笔记工具 + Agent Skills 的结合模式，KeyHint 也可探索「教 AI 使用快捷键」的 Skill 化方向（产品参考：高）
+- [2026-03-23] #244 n8n-MCP 验证了「MCP 连接一切」的趋势——用 MCP 让 Claude Code 自动构建自动化工作流，15.8K Stars（技术参考）
+- [2026-03-23] #223 Claude Code 项目配置指南 9K+ likes：说明开发者配置痛点真实存在，可做中文版深度教程（自媒体价值：高）
+- [2026-03-23] #247 Hyperagents（Jeff Clune）：Agent 自主构建和改进其他 Agent，Meta-Evolution 方向的学术验证——可做「AI 自进化」系列选题（自媒体价值：高）
+- [2026-03-24] #248 Claude Computer Use + Dispatch 深度选题：AI 从文本交互到物理设备操控的里程碑，可拆解为「Claude 帮你操作电脑」实测教程（自媒体价值：极高，36K likes）
+- [2026-03-24] #249 Anthropic Phone Use（Orbit）：Claude 即将能操控手机，对 iOS App 开发者意味着什么？KeyHint 可考虑「AI 操控时的快捷键辅助」场景（产品参考：高）
+- [2026-03-24] #252 Sahil Lavingia 的 9 个 OPC Agent Skills 可直接用于 onemake.dev 的产品决策流程——Find Community、Build MVP、Launch 等 Skill 直接可用（工具参考：高）
+- [2026-03-24] #254 redline「用竞品审查竞品」的模式值得借鉴：Claude Code 写代码 → OpenAI Codex 审查 → 双重质量保障，Hook 机制的创新应用（技术参考：中）
+- [2026-03-24] #263 MoneyPrinterV2 今日爆发+2880 Stars，验证了「AI 自动化内容变现」的强烈需求，可做自媒体拆解选题（自媒体价值：高）
