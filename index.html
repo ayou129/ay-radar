@@ -483,6 +483,7 @@
       font-size: 12px;
       transition: color 0.15s;
       line-height: 1.4;
+      text-decoration: none;
     }
     .title-link:hover { color: var(--accent-cyan); }
 
@@ -693,7 +694,6 @@
           title: '操作', width: 100,
           render: (_, r) => (
             <Space size={8}>
-              {r.url && <button className="act-link" onClick={() => window.open(r.url, '_blank')}>原文</button>}
               <Popconfirm title="确定删除？" onConfirm={() => handleDelete(r.id)} okText="删除" cancelText="取消">
                 <button className="act-link danger">删除</button>
               </Popconfirm>
@@ -832,10 +832,6 @@
               React.createElement('div', { style: { display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 } },
                 React.createElement('span', { style: { fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--text-muted)', flexShrink: 0 } }, `#${detailItem?.id || ''}`),
                 React.createElement('span', { style: { fontFamily: 'var(--font-mono)', fontSize: 14, fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flexShrink: 1 } }, detailItem?.title || '无标题'),
-                detailItem?.url && React.createElement('a', {
-                  href: detailItem.url, target: '_blank', rel: 'noopener',
-                  style: { flexShrink: 0, fontSize: 10, color: 'var(--accent-cyan)', fontFamily: 'var(--font-mono)', textDecoration: 'none', whiteSpace: 'nowrap' }
-                }, '来源'),
                 React.createElement('button', {
                   onClick: () => {
                     const text = `标题: ${detailItem?.title || ''}\n来源: ${detailItem?.url || '无链接'}`;
@@ -882,6 +878,11 @@
                     <Descriptions.Item label="发布时间">{detailItem.published_at || '-'}</Descriptions.Item>
                     <Descriptions.Item label="发现时间">{detailItem.discovered_at || '-'}</Descriptions.Item>
                     <Descriptions.Item label="巡检轮次">{detailItem.round_id || '-'}</Descriptions.Item>
+                    <Descriptions.Item label="原文链接" span={4}>
+                      {detailItem.url
+                        ? <a href={detailItem.url} target="_blank" rel="noopener noreferrer" style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--accent-cyan)', textDecoration: 'none', wordBreak: 'break-all' }}>{detailItem.url}</a>
+                        : '-'}
+                    </Descriptions.Item>
                   </Descriptions>
                 </div>
 
