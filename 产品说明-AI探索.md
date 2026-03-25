@@ -293,6 +293,8 @@ Agent 完成后用 Python `sqlite3` 模块写入 DB。
 - [2026-03-24] ProductHunt Cloudflare 验证需手动点击复选框才能通过，且首次通过后 URL 会跳转到错误日期（3/1），需二次导航。考虑优先用 WebSearch 抓取 PH 数据代替浏览器访问
 - [2026-03-24] GitHub Trending 连续三轮高重复率（本轮 15 项中约 10 项已在 DB），确认降频为隔轮检查的必要性
 - [2026-03-24] Claude Computer Use 发布当天，X.com 时间线被相关内容刷屏——重大产品发布日应聚焦该主题深挖，而非平铺浏览多平台
+- [2026-03-25] 本轮跳过了 GitHub Trending 和 ProductHunt（连续高重复率），专注 X.com 时间线 + HuggingFace + Reddit，效率明显提升。建议正式将 GH Trending 和 PH 降为隔轮检查
+- [2026-03-25] X.com 搜索补充（如 "litellm attack"）对获取事件全貌非常有效——发现了 Karpathy 原推（15K likes vs Elon 转发 3.7K）和关键技术细节（受影响版本、攻击路径）。建议重大事件时主动用搜索补充时间线
 
 ### Idea 发现
 
@@ -323,3 +325,9 @@ Agent 完成后用 Python `sqlite3` 模块写入 DB。
 - [2026-03-24] #252 Sahil Lavingia 的 9 个 OPC Agent Skills 可直接用于 onemake.dev 的产品决策流程——Find Community、Build MVP、Launch 等 Skill 直接可用（工具参考：高）
 - [2026-03-24] #254 redline「用竞品审查竞品」的模式值得借鉴：Claude Code 写代码 → OpenAI Codex 审查 → 双重质量保障，Hook 机制的创新应用（技术参考：中）
 - [2026-03-24] #263 MoneyPrinterV2 今日爆发+2880 Stars，验证了「AI 自动化内容变现」的强烈需求，可做自媒体拆解选题（自媒体价值：高）
+- [2026-03-25] #264 litellm 供应链攻击（Karpathy 15K likes，598万 views）：pip install 即窃取全部凭证。可做安全警示选题，公众号+抖音双平台（自媒体价值：极高）
+- [2026-03-25] #265 Sora 关停 + Disney 合作终止：大厂明星产品半年即死，开源视频生成的窗口期。可做「Sora 死了，然后呢」系列选题（自媒体价值：极高）
+- [2026-03-25] #266 Writing Style Skill 自进化方法：AI 写初稿→人改→diff→规则回写→越写越像你。可做「训练 AI 写出你的风格」教程（自媒体价值：高）
+- [2026-03-25] #269 Hesam 反直觉预测：5年后 SWE 需求激增但无人供给——适合抖音争议话题视频（自媒体价值：高）
+- [2026-03-25] #279 OpenResearcher（457 upvotes）：Gemini/Perplexity Deep Research 的开源替代，可评估集成到自有工作流（工具参考：高）
+- [2026-03-25] #284 三家公司两周内同时发布桌面 AI Agent：Claude Computer Use + Operator + Mariner，桌面 Agent 范式转移对 macOS 工具开发者意味着什么（产品参考：高）
