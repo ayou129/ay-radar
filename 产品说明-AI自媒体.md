@@ -128,11 +128,23 @@
 7. 截图保存到 `.screenshots/`
 
 **排版规范**：
-- 公众号编辑器不支持原生 Markdown，需转换为富文本
-- 字体：正文默认「平方」（iOS 原生支持），安卓侧选择优雅的无衬线回退字体
+- 公众号编辑器是 ProseMirror，不支持原生 Markdown，通过 `page.evaluate()` 注入带 inline style 的 HTML
+- 字体：正文默认「平方」（iOS 原生），安卓回退无衬线；封面图用 Noto Sans SC 900（Google 开源免费）
 - 段落短（每段 2-4 行），适合手机竖屏阅读
-- 关键信息加粗，核心观点用引用块样式
+- 关键信息加粗（`color:#6366f1`），核心观点用引用块样式（`border-left:4px solid #6366f1`）
 - 发布前必须手机端预览测试排版效果
+
+**封面图生成**：
+- 模板文件：`templates/cover-daily.html`（每期改标题和期号即可）
+- 背景图：`assets/bg-icons-grid.png`（图标阵列）/ `assets/bg-news-flow.png`（信息流），MJ 生成
+- 截图方式：启动本地 HTTP 服务器 → MCP Playwright 截取 `.cover` 元素 → 900x383px
+- 上传方式：通过 file input 插入正文 → "从正文选择" 设为封面
+
+**内容合规**：
+- 事实句前加来源标注（据彭博社报道 / 据 CNBC 报道）
+- 分析和观点用"值得注意的是"、"可能"等限定词，不做绝对化断言
+- 创作来源选"个人观点，仅供参考"
+- 声明文字原创，开启快捷转载和留言
 
 ### Step 5：发布到抖音（图文）
 
