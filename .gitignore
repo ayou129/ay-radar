@@ -22,3 +22,5 @@ scripts/
 .claude/*
 !.claude/skills/
 skills-lock.json
+
+.mcp.json
