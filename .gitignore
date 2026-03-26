@@ -1,11 +1,24 @@
+# System
 .DS_Store
 __pycache__/
-.env
-.screenshots/
-.claude/scheduled_tasks.lock
-!.claude/settings.local.json
-.playwright-mcp/
 *.log
 
-scripts
-.codex
+# Runtime
+.env
+data.db
+data.db-wal
+data.db-shm
+
+# Local private
+docs/TEMP-*
+scripts/
+.screenshots/
+
+# Tooling
+.codex/
+.agents/
+.mcp.json
+.playwright-mcp/
+.claude/*
+!.claude/skills/
+skills-lock.json

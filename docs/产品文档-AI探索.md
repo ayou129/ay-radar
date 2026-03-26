@@ -295,6 +295,8 @@ Agent 完成后用 Python `sqlite3` 模块写入 DB。
 - [2026-03-24] Claude Computer Use 发布当天，X.com 时间线被相关内容刷屏——重大产品发布日应聚焦该主题深挖，而非平铺浏览多平台
 - [2026-03-25] 本轮跳过了 GitHub Trending 和 ProductHunt（连续高重复率），专注 X.com 时间线 + HuggingFace + Reddit，效率明显提升。建议正式将 GH Trending 和 PH 降为隔轮检查
 - [2026-03-25] X.com 搜索补充（如 "litellm attack"）对获取事件全貌非常有效——发现了 Karpathy 原推（15K likes vs Elon 转发 3.7K）和关键技术细节（受影响版本、攻击路径）。建议重大事件时主动用搜索补充时间线
+- [2026-03-26] HuggingFace Daily Papers 今日仅 2 篇且价值一般，确认下午/晚间巡检效果更好（UTC 更新时间差）。早间巡检可跳过 HF
+- [2026-03-26] Claude 官方账号 @claudeai 一天内发布 Auto Mode + 移动端 MCP 两个重磅更新，"为你推荐"标签在大版本发布日信噪比显著提升——建议关注 Anthropic 发布节奏，发布日优先刷"为你推荐"
 
 ### Idea 发现
 
@@ -331,3 +333,8 @@ Agent 完成后用 Python `sqlite3` 模块写入 DB。
 - [2026-03-25] #269 Hesam 反直觉预测：5年后 SWE 需求激增但无人供给——适合抖音争议话题视频（自媒体价值：高）
 - [2026-03-25] #279 OpenResearcher（457 upvotes）：Gemini/Perplexity Deep Research 的开源替代，可评估集成到自有工作流（工具参考：高）
 - [2026-03-25] #284 三家公司两周内同时发布桌面 AI Agent：Claude Computer Use + Operator + Mariner，桌面 Agent 范式转移对 macOS 工具开发者意味着什么（产品参考：高）
+- [2026-03-26] #288 Claude Code Auto Mode（37K likes）：AI 自主权限决策选题——可做「Auto Mode 实测：效率提升多少？安全吗？」深度教程（自媒体价值：极高）
+- [2026-03-26] #289 Claude 移动端 MCP 工具上线：MCP 从桌面扩展到手机，KeyHint 应考虑 MCP 集成——让 AI Agent 能查询当前应用快捷键（产品参考：高）
+- [2026-03-26] #295 小互公众号排版 Skill 开源：与我们现有公众号工作流直接相关，评估是否集成或借鉴其 AI 分析内容结构自动排版的思路（工具参考：高）
+- [2026-03-26] #290 Browser Use SOTA 97% + Karpathy Auto-Research：用 Claude Code in a loop 自动优化产品——可应用到我们自己的巡检流程优化（技术参考：高）
+- [2026-03-26] #296 G0DM0D3 越狱 1024 likes：AI 安全攻防话题自带流量，可做「33种技术同时突破51个模型」的安全科普选题（自媒体价值：高）
