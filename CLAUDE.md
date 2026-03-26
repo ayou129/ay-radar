@@ -164,7 +164,7 @@ copy data.db data.db.bak
 
 ## 浏览器自动化（可选）
 
-AI 巡检功能依赖 Playwright MCP + 共享 Chrome 实例来复用登录态。
+AI 巡检功能依赖 Playwright MCP + 共享 Chrome 实例来复用登录态。需要 Node.js（≥ 18）。
 
 首次配置运行：
 

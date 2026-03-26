@@ -10,6 +10,13 @@ user_invocable: true
 
 在用户机器上生成 Playwright MCP 所需的基础设施文件，使所有项目共享同一个 Chrome 实例和登录态。
 
+## 前置依赖
+
+- **Node.js**（≥ 18）：用于运行 `npx @playwright/mcp`
+  - macOS：`brew install node` 或从 [nodejs.org](https://nodejs.org) 下载
+  - Ubuntu / Debian：`sudo apt install nodejs npm`
+  - Windows 10+：从 [nodejs.org](https://nodejs.org) 下载 LTS 版本，安装时勾选 **Add to PATH**
+
 ## 执行步骤
 
 ### 1. 检测平台
@@ -102,7 +109,7 @@ $CHROME_PROFILE = "$env:USERPROFILE\.chrome-shared\.chrome-profile"
 
 function Test-CDP {
     try {
-        $null = Invoke-WebRequest -Uri "$CDP_URL/json/version" -TimeoutSec 2 -ErrorAction Stop
+        $null = Invoke-WebRequest -Uri "$CDP_URL/json/version" -TimeoutSec 2 -UseBasicParsing -ErrorAction Stop
         return $true
     } catch {
         return $false
@@ -238,7 +245,7 @@ await page.addInitScript(() => {
 
 **模板变量替换**：
 - macOS/Linux: `{{CHROME_PROFILE_PATH}}` → `~/.chrome-shared/.chrome-profile/`
-- Windows: `{{CHROME_PROFILE_PATH}}` → `%USERPROFILE%\.chrome-shared\.chrome-profile\`
+- Windows: `{{CHROME_PROFILE_PATH}}` → `C:\Users\<用户名>\.chrome-shared\.chrome-profile\`
 
 ### 6. 提示 MCP 服务配置
 

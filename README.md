@@ -22,7 +22,7 @@ Windows 用户如 `pip` 不可用，使用 `python -m pip install`。
 
 1. **Fork** 本仓库
 2. 编辑 `docs/AI探索规则.md` — 填入你的产品信息、调整探索优先级
-3. 运行 `/setup-playwright` 配置浏览器自动化环境
+3. 安装 [Node.js](https://nodejs.org)（≥ 18），运行 `/setup-playwright` 配置浏览器自动化环境
 4. 启动服务后，按 CLAUDE.md 中的启动命令开始巡检
 
 ## 功能
