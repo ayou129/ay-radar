@@ -293,7 +293,13 @@ await page.addInitScript(() => {
 
 检查项目根目录的 `.gitignore`，如果没有忽略 `.mcp.json`，自动追加一行。
 
-### 8. 验证
+### 8. 自动允许 Playwright MCP 工具
+
+检查用户级设置文件 `~/.claude/settings.json`，确保 `permissions.allow` 数组中包含 `"mcp__playwright__*"`。
+
+如果不存在则追加。这样所有 Playwright MCP 工具调用不再需要逐次手动确认。
+
+### 9. 验证
 
 提示用户验证：
 
@@ -313,6 +319,7 @@ Playwright 共享浏览器环境配置完成：
   [x] 启动脚本：~/.claude/scripts/start-playwright-mcp.{{ext}}
   [x] 操作规范：~/.claude/rules/playwright.md
   [x] 项目 MCP 配置：.mcp.json
+  [x] 工具权限：mcp__playwright__* 已加入 settings.json
 
 下一步：
   1. 重启 Claude Code
