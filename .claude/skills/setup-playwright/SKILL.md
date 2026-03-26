@@ -247,11 +247,15 @@ await page.addInitScript(() => {
 - macOS/Linux: `{{CHROME_PROFILE_PATH}}` → `~/.chrome-shared/.chrome-profile/`
 - Windows: `{{CHROME_PROFILE_PATH}}` → `C:\Users\<用户名>\.chrome-shared\.chrome-profile\`
 
-### 6. 提示 MCP 服务配置
+### 6. 写入项目级 `.mcp.json`
 
-生成文件后，提示用户需要在 `~/.claude.json` 中添加 MCP 服务配置：
+在**当前项目根目录**自动创建或更新 `.mcp.json`，写入 Playwright MCP 配置。
 
-**macOS / Linux**：
+> MCP 服务配置必须放在项目级 `.mcp.json` 中才会生效，`~/.claude.json` 的顶层 `mcpServers` 对 MCP 启动无效。
+
+如果 `.mcp.json` 已存在且包含其他 MCP 服务，保留已有配置，仅合并 `playwright` 条目。
+
+**macOS / Linux** — 写入内容：
 
 ```json
 {
@@ -266,7 +270,7 @@ await page.addInitScript(() => {
 }
 ```
 
-**Windows**：
+**Windows** — 写入内容：
 
 ```json
 {
@@ -281,9 +285,15 @@ await page.addInitScript(() => {
 }
 ```
 
-告知用户：此配置可以放在 `~/.claude.json` 的顶层 `mcpServers` 中（全局生效），也可以放在 `projects["<项目路径>"].mcpServers` 中（仅该项目生效）。
+其中 `{{HOME}}` / `{{USERPROFILE}}` 替换为实际绝对路径。
 
-### 7. 验证
+确保 `.mcp.json` 已加入 `.gitignore`（路径含本机用户名，不应入库）。
+
+### 7. 确保 `.mcp.json` 在 `.gitignore` 中
+
+检查项目根目录的 `.gitignore`，如果没有忽略 `.mcp.json`，自动追加一行。
+
+### 8. 验证
 
 提示用户验证：
 
@@ -302,9 +312,9 @@ Playwright 共享浏览器环境配置完成：
   [x] Chrome profile 目录：{{CHROME_PROFILE_PATH}}
   [x] 启动脚本：~/.claude/scripts/start-playwright-mcp.{{ext}}
   [x] 操作规范：~/.claude/rules/playwright.md
+  [x] 项目 MCP 配置：.mcp.json
 
 下一步：
-  1. 将上方 MCP 配置添加到 ~/.claude.json
-  2. 重启 Claude Code
-  3. 首次使用需在浏览器中手动登录目标平台
+  1. 重启 Claude Code
+  2. 首次使用需在浏览器中手动登录目标平台
 ```
