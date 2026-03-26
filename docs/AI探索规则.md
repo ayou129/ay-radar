@@ -204,27 +204,7 @@ Agent 完成后用 Python `sqlite3` 模块写入 DB。
 
 ## 数据存储
 
-数据库：`data.db`（项目根目录）。
-
-### 表结构
-
-| 字段 | 类型 | 说明 |
-|------|------|------|
-| id | INTEGER PK | 自增主键 |
-| url | TEXT UNIQUE | 原始链接，作为去重主键 |
-| platform | TEXT | 来源平台：x / github / producthunt / huggingface / reddit / other |
-| author | TEXT | 作者/账号名 |
-| title | TEXT | 标题（如有），同时用于主题级去重 |
-| summary | TEXT | Claude 总结的内容摘要 |
-| category | TEXT | 分类：tool_update / blogger_insight / paper / trend |
-| importance | TEXT | 重要度：high / medium / low（Claude 判断） |
-| published_at | TEXT | 内容原始发布时间 |
-| discovered_at | TEXT | 首次发现时间 |
-| updated_at | TEXT | 最近更新时间 |
-| round_id | TEXT | 巡检轮次标识（如 2026-03-19_22:00） |
-| raw_data | TEXT | JSON 格式，含互动数据和评论（如有），供分析 Agent 使用 |
-| md | TEXT | 深度分析文章（Markdown），写入规范见 Step 4 |
-| user_note | TEXT | 用户备注——主观评价、关联 idea、方向偏好等，巡检时作为 L2 探索参考 |
+表结构详见 [CLAUDE.md](../CLAUDE.md#表结构)。
 
 ### 采集规则
 
@@ -244,17 +224,6 @@ Agent 完成后用 Python `sqlite3` 模块写入 DB。
 
 - `GET /api/discoveries/{id}/article` — 读取 `md` 字段，渲染为 HTML 返回
 - 前端：`md` 有值的记录显示绿色"阅读"按钮，点击弹出 Modal 展示
-
-### 关注记录表 `ai_follow_log`
-
-| 字段 | 类型 | 说明 |
-|------|------|------|
-| id | INTEGER PK | 自增主键 |
-| platform | TEXT | 平台 |
-| username | TEXT UNIQUE | 用户名，去重 |
-| reason | TEXT | 关注理由 |
-| followed_at | TEXT | 关注时间 |
-| status | TEXT | success / failed / skipped |
 
 ## 风控策略
 

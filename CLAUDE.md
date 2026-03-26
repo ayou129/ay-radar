@@ -6,36 +6,13 @@
 ├── server.py              # FastAPI 后端（启动时自动建表）
 ├── index.html             # React 单页前端（Ant Design）
 ├── docs/
-│   └── 产品文档-AI探索.md   # 核心产品文档
+│   └── AI探索规则.md       # 巡检执行规则（Fork 后自定义）
 └── data.db                # SQLite 数据库（自动生成，不入库）
 ```
 
 ## 环境准备
 
-### Python
-
-| 平台 | 安装方式 |
-|------|---------|
-| macOS | `brew install python` 或从 [python.org](https://python.org) 下载 |
-| Ubuntu / Debian | `sudo apt install python3 python3-pip` |
-| Windows 10+ | 从 [python.org](https://python.org) 下载安装，安装时勾选 **Add to PATH** |
-
-### 依赖安装
-
-```bash
-pip install fastapi uvicorn markdown
-```
-
-Windows 如果 `pip` 不可用，尝试 `python -m pip install`。
-
-### 启动服务
-
-```bash
-python server.py
-# 访问 http://localhost:8002
-```
-
-首次启动自动创建 `data.db`，无需手动建表。
+详见 [README.md](README.md#快速开始)。
 
 ## 数据库操作
 
@@ -204,13 +181,13 @@ AI 巡检功能依赖 Playwright MCP + 共享 Chrome 实例来复用登录态。
 ### AI 巡检（广度）
 
 ```
-/loop 30m 阅读 @docs/产品文档-AI探索.md 按「单轮执行流程」执行一轮 AI 内容巡检。
+/loop 30m 阅读 @docs/AI探索规则.md 按「单轮执行流程」执行一轮 AI 内容巡检。
 ```
 
 ### AI 深度调研
 
 ```
-阅读 @docs/产品文档-AI探索.md 按「深度调研流程」对 #<id> 进行深度调研。
+阅读 @docs/AI探索规则.md 按「深度调研流程」对 #<id> 进行深度调研。
 ```
 
 也支持自由输入：`按深度调研流程，调研一下 macOS 快捷键工具的竞品格局`
